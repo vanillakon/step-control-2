@@ -1,25 +1,65 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import Home from '../views/Home.vue'
+import { createRouter, createWebHistory } from "vue-router";
+import AppBooks from "../views/AppBooks";
+import Book from "../views/Book";
+import AppVisitors from "../views/AppVisitors";
+import AppCards from "../views/AppCards";
+import AppStatistics from "../views/AppStatistics";
+import NotFound from "../views/NotFound";
 
-const routes = [
-  {
-    path: '/',
-    name: 'Home',
-    component: Home
-  },
-  {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
-]
-
+const defaultTitle = "Library";
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
-  routes
-})
+  history: createWebHistory(),
+  routes: [
+    {
+      path: "/books",
+      component: AppBooks,
+      alias: "/",
+      meta: {
+        title: "Books",
+      },
+    },
+    {
+      path: "/visitors",
+      component: AppVisitors,
+      meta: {
+        title: "Visitors",
+      },
+    },
+    {
+      path: "/cards",
+      component: AppCards,
+      meta: {
+        title: "Cards",
+      },
+    },
+    {
+      path: "/statistics",
+      component: AppStatistics,
+      meta: {
+        title: "Statistics",
+      },
+    },
+    {
+      path: "/:notfound(.*)",
+      component: NotFound,
+      meta: {
+        title: "NotFound",
+      },
+    },
+    {
+      path: "/book/:id",
+      component: Book,
+      meta: {
+        title: "Books",
+      },
+    },
+  ],
+  linkActiveClass: "active",
+  linkExactActiveClass: "active",
+});
 
-export default router
+router.beforeEach((to, from, next) => {
+  document.title = to.meta.title ? to.meta.title : defaultTitle;
+  next();
+});
+export default router;
